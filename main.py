@@ -23,10 +23,9 @@ def parse_file(f):
     first, *rest = f.readlines()
 
     dt = float(first.split(':')[1])
-    ks = list(range(512))
     xt = list(map(float, rest))
 
-    return dt, ks, xt
+    return dt, xt
 
 
 def save_plot(xs, ys, img_fname):
@@ -48,7 +47,10 @@ def generate_random_signal():
 
 def process_file(f):
     # Содержимое файла с вариантом
-    dt, ks, xt = parse_file(f)
+    dt, xt = parse_file(f)
+    
+    # Отсчёты
+    ks = list(range(N))
 
     # Сохраняем исходный сигнал
     save_plot(ks, xt, IMG0_FNAME)
@@ -89,7 +91,7 @@ def process_file(f):
         )
     )
 
-    # Генерируем слечайный сигнал (шум)
+    # Генерируем случайный сигнал (шум)
     noise = generate_random_signal()
 
     # Исходный сигнал с шумом
