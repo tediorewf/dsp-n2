@@ -4,6 +4,7 @@ import os
 import sympy as sp
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.signal import find_peaks
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -46,6 +47,12 @@ def process_file(f):
 
     # Сохраняем первый график
     save_plot(ks, moduls, IMG1_FNAME)
+
+    # Находим пики
+    x_peaks, _ = find_peaks(moduls)
+    y_peaks = [moduls[x] for x in x_peaks]
+    peaks = list(zip(x_peaks, y_peaks))
+    print('Пики : {}'.format(peaks))
 
 
 with open(SA_FNAME, 'r') as f:
