@@ -1,5 +1,8 @@
 #!/usr/bin/env python
+from cmath import pi
 import os
+import operator
+import random
 
 import sympy as sp
 import numpy as np
@@ -32,6 +35,17 @@ def save_plot(xs, ys, img_fname):
     plt.clf()
 
 
+EDGES = (-3.0, 3.0)
+N = 512
+
+
+def generate_random_signal():
+    signal = [
+        random.uniform(*EDGES) for _ in range(N)
+    ]
+    return signal
+
+
 def process_file(f):
     # Содержимое файла с вариантом
     dt, ks, xt = parse_file(f)
@@ -53,6 +67,33 @@ def process_file(f):
     y_peaks = [moduls[x] for x in x_peaks]
     peaks = list(zip(x_peaks, y_peaks))
     print('Пики : {}'.format(peaks))
+
+    # Дельта кси
+    d_ksi = (2*pi)/(dt*N)
+
+    # Просто частоты
+    ksi_40 = d_ksi*40
+    ksi_62 = d_ksi*62
+    print(
+        'Частота первой гармоники: {}\nЧастота второй гармоники: {}'.format(
+            ksi_40, ksi_62
+        )
+    )
+
+    # Круговые частоты
+    c_ksi_40 = ksi_40*(2*pi)
+    c_ksi_62 = ksi_62*(2*pi)
+    print(
+        'Круговая частота первой гармоники: {}\nКруговая частота второй гармоники: {}'.format(
+            c_ksi_40, c_ksi_62
+        )
+    )
+
+    # Генерируем слечайный сигнал (шум)
+    noise = generate_random_signal()
+
+    # Исходный сигнал с шумом
+    noisy_signal = list(map(operator.add, xt, noise))
 
 
 with open(SA_FNAME, 'r') as f:
